@@ -10,8 +10,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.dacs.bff.dto.AlbumReviewDTO;
 import com.dacs.bff.dto.AlumnoDto;
+import com.dacs.bff.dto.UserDTO;
 import com.dacs.bff.dto.BuildInfoDTO;
+import com.dacs.bff.dto.ReviewCreateRequest;
+import com.dacs.bff.dto.ReviewCreateDTO;
 
 
 @FeignClient(
@@ -41,4 +45,25 @@ public interface ApiBackendClient {
     
     @DeleteMapping("/alumno/{id}")
     AlumnoDto delete(@PathVariable("id") Long id);
+    
+    @GetMapping("/reviews/today")
+    List<AlbumReviewDTO> getTopReviewsForToday();
+
+    @PostMapping("/reviews")
+    AlbumReviewDTO createReview(@RequestBody ReviewCreateDTO review);
+    
+    @GetMapping("/user")
+    List<UserDTO> getUsers();
+
+    @GetMapping("/user/{id}")
+    UserDTO getUserById(@PathVariable("id") Long id);
+
+    @PostMapping("/user")
+    UserDTO saveUser(@RequestBody UserDTO user);
+
+    @PutMapping("/user")
+    UserDTO updateUser(@RequestBody UserDTO user);
+
+    @DeleteMapping("/user/{id}")
+    void deleteUser(@PathVariable("id") Long id);
 }

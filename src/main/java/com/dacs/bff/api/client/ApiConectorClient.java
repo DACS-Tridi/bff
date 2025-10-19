@@ -16,8 +16,13 @@ public interface ApiConectorClient {
 
 	   @GetMapping("/ping")
 	   String ping();
+	   
 	   @GetMapping("/spotify/albums")
 	   List<AlbumDTO> albums();
+	   
 	   @GetMapping("/spotify/albums/search")
 	   List<AlbumDTO> searchAlbums(@RequestParam("q") String query);
+	   
+	   @GetMapping("/spotify/album")
+	   AlbumDTO getAlbumById(@RequestParam("id") String id);
 }

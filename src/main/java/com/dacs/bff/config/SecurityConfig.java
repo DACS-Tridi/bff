@@ -1,6 +1,8 @@
 package com.dacs.bff.config;
 
 import java.util.Arrays;
+import java.util.List;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -14,48 +16,42 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
 
-	// Bean para configurar CORS globalmente.
-	@Bean
-	public CorsConfigurationSource corsConfigurationSource() {
-		// Crea una nueva fuente de configuración basada en URL.
-		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		// Define las reglas de CORS.
-		CorsConfiguration config = new CorsConfiguration();
-		
-		// Permite la credenciales, como cookies y encabezados de autenticación.
-		config.setAllowCredentials(true);
-		
-		// Permite el origen de tu aplicación de Angular. Es crucial para resolver tu error.
-		// En un entorno de producción, reemplaza "http://localhost:4200" con el dominio de tu frontend.
-		config.setAllowedOrigins(Arrays.asList("http://localhost:4200"));
-		
-		// Permite todos los encabezados HTTP.
-		config.setAllowedHeaders(Arrays.asList("*"));
-		
-		// Permite los métodos HTTP que tu frontend usará.
-		config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-		
-		// Registra esta configuración para todas las rutas ("/**").
-		source.registerCorsConfiguration("/**", config);
-		
-		return source;
-	}
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+//        http
+//            .cors().and()
+//            .csrf().disable()
+//            .authorizeHttpRequests(auth -> auth
+//                .requestMatchers("/tridify/reviews/**").authenticated()
+//                .anyRequest().permitAll()
+//            )
+//            .oauth2ResourceServer(oauth2 -> oauth2.jwt());
+//        return http.build();
+//    }
+    
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    	http.cors().and()
+	        .csrf().disable()
+	        .authorizeHttpRequests(auth -> auth
+	            .requestMatchers("/tridify/reviews/**").permitAll()
+	            .anyRequest().permitAll()
+	        );
 
-	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		// Habilita la configuración de CORS definida en el bean de arriba.
-		http.cors(); 
-		
-		// Deshabilita CSRF para simplificar, pero considera habilitarlo en producción.
-		http.csrf().disable();
-		
-		// Autoriza todas las peticiones a cualquier URL.
-		http.authorizeRequests(authorize -> authorize
-			.anyRequest().permitAll()
-		);
+        return http.build();
+    }
+    
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:4200"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
 
-		return http.build();
-	}
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 }
-

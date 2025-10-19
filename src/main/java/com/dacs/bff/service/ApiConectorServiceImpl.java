@@ -31,6 +31,11 @@ public class ApiConectorServiceImpl implements ApiConectorService {
 	public List<AlbumDTO> searchAlbums(String query) {
 		return apiConectorClient.albums();
 	}
+	
+	@Override
+	public AlbumDTO getAlbumById(String id) {
+		return apiConectorClient.getAlbumById(id);
+	}
 
 //	@Override
 //	public ItemDto getItemById(Integer id) throws Exception {

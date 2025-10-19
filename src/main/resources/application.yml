@@ -20,3 +20,9 @@ server:
   port :  9001
   servlet:
     contextPath: /bff
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+         issuer-uri: 'http://localhost:8180/realms/dacs'

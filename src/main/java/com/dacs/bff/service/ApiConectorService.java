@@ -12,5 +12,7 @@ public interface ApiConectorService {
 	
 	public List<AlbumDTO> searchAlbums(String query);
 	
+	public AlbumDTO getAlbumById(String id);
+	
 //	public ItemDto getItemById(Integer id) throws Exception;
 }
