@@ -29,7 +29,7 @@ public class ApiConectorServiceImpl implements ApiConectorService {
 	
 	@Override
 	public List<AlbumDTO> searchAlbums(String query) {
-		return apiConectorClient.albums();
+		return apiConectorClient.searchAlbums(query);
 	}
 	
 	@Override

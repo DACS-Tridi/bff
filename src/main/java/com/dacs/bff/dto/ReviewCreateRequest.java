@@ -5,7 +5,7 @@ import java.util.List;
 
 @Data
 public class ReviewCreateRequest {
-    private Long albumId;
+    private String albumId;
     private String highlight;
     private Double rating;
     private List<String> tags;

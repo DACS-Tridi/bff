@@ -91,31 +91,27 @@ public class ApiBackendServiceImpl implements ApiBackendService{
     
     @Override
     public UserDTO getCurrentUser() {
-        // 1️⃣ Obtener el token o principal autenticado
         var authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null) {
             throw new RuntimeException("No authenticated user found");
         }
 
-        // 2️⃣ Dependiendo del tipo de integración
-        if (authentication.getPrincipal() instanceof org.keycloak.KeycloakPrincipal<?> keycloakPrincipal) {
-            var token = keycloakPrincipal.getKeycloakSecurityContext().getToken();
+        var principal = authentication.getPrincipal();
 
+        // Keycloak adapter
+        if (principal instanceof org.keycloak.KeycloakPrincipal<?> keycloakPrincipal) {
+            var token = keycloakPrincipal.getKeycloakSecurityContext().getToken();
             UserDTO user = new UserDTO();
-            user.setId(null); // si tu token no tiene id, podés ignorarlo
+            user.setId(null);
             user.setUsername(token.getPreferredUsername());
             user.setDescription(token.getName());
             user.setActive(true);
-            user.setBornDate(null);
-            user.setRegisterDate(null);
-            user.setGender(null);
-
             return user;
         }
 
-        // 3️⃣ Si usás OAuth2 Resource Server (sin Keycloak adapter)
-        if (authentication.getPrincipal() instanceof org.springframework.security.oauth2.jwt.Jwt jwt) {
+        // OAuth2 Resource Server
+        if (principal instanceof org.springframework.security.oauth2.jwt.Jwt jwt) {
             UserDTO user = new UserDTO();
             user.setUsername(jwt.getClaimAsString("preferred_username"));
             user.setDescription(jwt.getClaimAsString("name"));
@@ -123,8 +119,18 @@ public class ApiBackendServiceImpl implements ApiBackendService{
             return user;
         }
 
-        // fallback
-        throw new RuntimeException("Unsupported principal type: " + authentication.getPrincipal().getClass());
+        // String (sin auth)
+        if (principal instanceof String username) {
+            UserDTO user = new UserDTO();
+            user.setId(0L);
+            user.setUsername(username);
+            user.setDescription("Anonymous User");
+            user.setActive(true);
+            return user;
+        }
+
+        throw new RuntimeException("Unsupported principal type: " + principal.getClass());
     }
+
 
 }

@@ -34,7 +34,7 @@ public class AlbumController {
 	
 	@GetMapping(value = "/albums/search")
     public List<AlbumDTO> searchAlbums(@RequestParam("q") String query) {
-		log.info("Busqueda de album");
+		log.info("Busqueda de album: {}", query);
 		try {
 			return apiConectorService.searchAlbums(query);			
 		} catch (Exception e) {
