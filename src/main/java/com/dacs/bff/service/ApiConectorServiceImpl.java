@@ -6,11 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dacs.bff.api.client.ApiConectorClient;
+import com.dacs.bff.controller.HomeController;
 import com.dacs.bff.dto.AlbumDTO;
 import com.dacs.bff.exeption.BffException;
 import com.dacs.bff.exeption.ConectorException;
 import com.dacs.bff.exeption.ErrorEnum;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ApiConectorServiceImpl implements ApiConectorService {
 
@@ -34,6 +38,10 @@ public class ApiConectorServiceImpl implements ApiConectorService {
 	
 	@Override
 	public AlbumDTO getAlbumById(String id) {
+		log.info("🎧 getAlbumById() llamado con id = [{}]", id);
+		if(id == null) {
+			throw new BffException(ErrorEnum.DATO_VALOR_INCORRECTO,"Album id no puede ser nulo");
+		}
 		return apiConectorClient.getAlbumById(id);
 	}
 

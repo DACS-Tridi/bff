@@ -23,6 +23,6 @@ public interface ApiConectorClient {
 	   @GetMapping("/spotify/albums/search")
 	   List<AlbumDTO> searchAlbums(@RequestParam("q") String query);
 	   
-	   @GetMapping("/spotify/album")
+	   @GetMapping("/spotify/album/")
 	   AlbumDTO getAlbumById(@RequestParam("id") String id);
 }

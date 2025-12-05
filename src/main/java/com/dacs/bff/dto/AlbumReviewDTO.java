@@ -15,7 +15,7 @@ public class AlbumReviewDTO {
     
     private String album;
     
-    private Long albumId;
+    private String albumId;
     
     private String highlight;
     

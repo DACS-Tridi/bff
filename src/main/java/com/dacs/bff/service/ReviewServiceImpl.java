@@ -2,10 +2,14 @@ package com.dacs.bff.service;
 
 import com.dacs.bff.api.client.ApiBackendClient;
 import com.dacs.bff.dto.*;
+
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ReviewServiceImpl {
 
@@ -19,8 +23,10 @@ public class ReviewServiceImpl {
     }
 
     public AlbumReviewDTO createReview(ReviewCreateRequest request) {
-    	AlbumDTO album = conectorClient.getAlbumById(String.valueOf(request.getAlbumId()));
-
+    		AlbumDTO album = conectorClient.getAlbumById(String.valueOf(request.getAlbumId()));
+    		
+    		log.info("{}",album.getName());
+    		
         UserDTO user = backendClient.getCurrentUser();
 
         ReviewCreateDTO reviewToPersist = new ReviewCreateDTO();
