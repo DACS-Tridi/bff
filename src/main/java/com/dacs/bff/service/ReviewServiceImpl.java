@@ -38,6 +38,7 @@ public class ReviewServiceImpl {
         reviewToPersist.setRating(request.getRating());
         reviewToPersist.setTags(request.getTags());
         reviewToPersist.setTone(request.getTone());
+        reviewToPersist.setReviewBody(request.getReviewBody());
 
         return backendClient.createReview(reviewToPersist);
     }

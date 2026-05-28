@@ -10,4 +10,5 @@ public class ReviewCreateRequest {
     private Double rating;
     private List<String> tags;
     private String tone;
+    private String reviewBody;
 }
