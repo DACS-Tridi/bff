@@ -7,7 +7,7 @@ import java.util.List;
 public class ReviewCreateDTO {
     private Long userId;
     private String albumId;
-    private String albumTitle;
+    private String album;
     private String cover;
     private String highlight;
     private Double rating;

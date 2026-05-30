@@ -8,17 +8,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.dacs.bff.api.client.ApiBackendClient;
 import com.dacs.bff.dto.AlbumReviewDTO;
+import com.dacs.bff.dto.AlbumReviewsResponseDTO;
 import com.dacs.bff.dto.AlumnoDto;
 import com.dacs.bff.dto.UserDTO;
-import com.dacs.bff.dto.ReviewCreateRequest;
 import com.dacs.bff.dto.ReviewCreateDTO;
 
 @Service
-public class ApiBackendServiceImpl implements ApiBackendService{
+public class ApiBackendServiceImpl implements ApiBackendService {
 
 	@Autowired
 	private ApiBackendClient apiBackendClient;
-	
+
 	@Override
 	public String ping() {
 		return apiBackendClient.ping();
@@ -26,111 +26,96 @@ public class ApiBackendServiceImpl implements ApiBackendService{
 
 	@Override
 	public AlumnoDto getAlumnoById(Long id) throws Exception {
-		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.alumnoById(id);
 	}
 
 	@Override
 	public List<AlumnoDto> getAlumnos() {
-		// TODO Auto-generated method stub
 		return apiBackendClient.alumnos();
 	}
 
 	@Override
 	public AlumnoDto savesAlumno(AlumnoDto alumno) throws Exception {
-		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.save(alumno);
 	}
 
 	@Override
 	public AlumnoDto updateAlumno(AlumnoDto alumno) throws Exception {
-		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.update(alumno);
 	}
 
 	@Override
 	public AlumnoDto deleteAlumno(Long id) throws Exception {
-		//TODO validar parametro y lanzar exepcion
 		return apiBackendClient.delete(id);
 	}
-	
-    @Override
-    public List<AlbumReviewDTO> getTopReviewsForToday() {
-        return apiBackendClient.getTopReviewsForToday();
-    }
 
-    @Override
-    public AlbumReviewDTO createReview(ReviewCreateDTO review) {
-        return apiBackendClient.createReview(review);
-    }
-    
-    @Override
-    public UserDTO getUserById(Long id) {
-        return apiBackendClient.getUserById(id);
-    }
+	@Override
+	public List<AlbumReviewDTO> getTopReviewsForToday() {
+		return apiBackendClient.getTopReviewsForToday();
+	}
 
-    @Override
-    public List<UserDTO> getUsers() {
-        return apiBackendClient.getUsers();
-    }
+	@Override
+	public AlbumReviewsResponseDTO getReviewsByAlbumId(String albumId) {
+		return apiBackendClient.getReviewsByAlbumId(albumId);
+	}
 
-    @Override
-    public UserDTO saveUser(UserDTO user) {
-        return apiBackendClient.saveUser(user);
-    }
+	@Override
+	public AlbumReviewDTO createReview(ReviewCreateDTO review) {
+		return apiBackendClient.createReview(review);
+	}
 
-    @Override
-    public UserDTO updateUser(UserDTO user) {
-        return apiBackendClient.updateUser(user);
-    }
+	@Override
+	public UserDTO getUserById(Long id) {
+		return apiBackendClient.getUserById(id);
+	}
 
-    @Override
-    public void deleteUser(Long id) {
-        apiBackendClient.deleteUser(id);
-    }
-    
-    @Override
-    public UserDTO getCurrentUser() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
+	@Override
+	public UserDTO getUserByUsername(String username) {
+		return apiBackendClient.getUserByUsername(username);
+	}
 
-        if (authentication == null) {
-            throw new RuntimeException("No authenticated user found");
-        }
+	@Override
+	public List<UserDTO> getUsers() {
+		return apiBackendClient.getUsers();
+	}
 
-        var principal = authentication.getPrincipal();
+	@Override
+	public UserDTO saveUser(UserDTO user) {
+		return apiBackendClient.saveUser(user);
+	}
 
-        // Keycloak adapter
-        if (principal instanceof org.keycloak.KeycloakPrincipal<?> keycloakPrincipal) {
-            var token = keycloakPrincipal.getKeycloakSecurityContext().getToken();
-            UserDTO user = new UserDTO();
-            user.setId(null);
-            user.setUsername(token.getPreferredUsername());
-            user.setDescription(token.getName());
-            user.setActive(true);
-            return user;
-        }
+	@Override
+	public UserDTO updateUser(UserDTO user) {
+		return apiBackendClient.updateUser(user);
+	}
 
-        // OAuth2 Resource Server
-        if (principal instanceof org.springframework.security.oauth2.jwt.Jwt jwt) {
-            UserDTO user = new UserDTO();
-            user.setUsername(jwt.getClaimAsString("preferred_username"));
-            user.setDescription(jwt.getClaimAsString("name"));
-            user.setActive(true);
-            return user;
-        }
+	@Override
+	public void deleteUser(Long id) {
+		apiBackendClient.deleteUser(id);
+	}
 
-        // String (sin auth)
-        if (principal instanceof String username) {
-            UserDTO user = new UserDTO();
-            user.setId(0L);
-            user.setUsername(username);
-            user.setDescription("Anonymous User");
-            user.setActive(true);
-            return user;
-        }
+	@Override
+	public UserDTO getCurrentUser() {
+		var authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        throw new RuntimeException("Unsupported principal type: " + principal.getClass());
-    }
+		if (authentication == null) {
+			throw new RuntimeException("No authenticated user found");
+		}
 
+		var principal = authentication.getPrincipal();
+		String username = null;
 
+		if (principal instanceof org.springframework.security.oauth2.jwt.Jwt jwt) {
+			username = jwt.getClaimAsString("preferred_username");
+		} else if (principal instanceof String str) {
+			username = str;
+		}
+
+		if (username == null) {
+			throw new RuntimeException("Could not resolve username from principal: " + principal.getClass());
+		}
+
+		// Busca o crea el usuario en el backend para obtener su id real
+		return apiBackendClient.getUserByUsername(username);
+	}
 }

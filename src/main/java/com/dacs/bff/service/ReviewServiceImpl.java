@@ -1,6 +1,5 @@
 package com.dacs.bff.service;
 
-import com.dacs.bff.api.client.ApiBackendClient;
 import com.dacs.bff.dto.*;
 
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +31,7 @@ public class ReviewServiceImpl {
         ReviewCreateDTO reviewToPersist = new ReviewCreateDTO();
         reviewToPersist.setUserId(user.getId());
         reviewToPersist.setAlbumId(album.getId());
-        reviewToPersist.setAlbumTitle(album.getName());
+        reviewToPersist.setAlbum(album.getName());
         reviewToPersist.setCover(album.getImageUrl());
         reviewToPersist.setHighlight(request.getHighlight());
         reviewToPersist.setRating(request.getRating());

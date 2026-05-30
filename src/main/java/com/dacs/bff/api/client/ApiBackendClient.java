@@ -8,13 +8,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import com.dacs.bff.dto.AlbumReviewDTO;
+import com.dacs.bff.dto.AlbumReviewsResponseDTO;
 import com.dacs.bff.dto.AlumnoDto;
 import com.dacs.bff.dto.UserDTO;
 import com.dacs.bff.dto.BuildInfoDTO;
-import com.dacs.bff.dto.ReviewCreateRequest;
 import com.dacs.bff.dto.ReviewCreateDTO;
 
 
@@ -49,9 +50,15 @@ public interface ApiBackendClient {
     @GetMapping("/reviews/today")
     List<AlbumReviewDTO> getTopReviewsForToday();
 
+    @GetMapping("/reviews/album/{albumId}")
+    AlbumReviewsResponseDTO getReviewsByAlbumId(@PathVariable("albumId") String albumId);
+
     @PostMapping("/reviews")
     AlbumReviewDTO createReview(@RequestBody ReviewCreateDTO review);
     
+    @GetMapping("/user/by-username")
+    UserDTO getUserByUsername(@RequestParam("username") String username);
+
     @GetMapping("/user")
     List<UserDTO> getUsers();
 
