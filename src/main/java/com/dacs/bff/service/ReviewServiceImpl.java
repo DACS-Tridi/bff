@@ -17,8 +17,17 @@ public class ReviewServiceImpl {
     @Autowired
     private ApiConectorService conectorClient; 
 
+    public List<AlbumReviewDTO> getAllReviews() {
+        return backendClient.getAllReviews();
+    }
+
     public List<AlbumReviewDTO> getTopReviewsForToday() {
         return backendClient.getTopReviewsForToday();
+    }
+
+    public List<AlbumReviewDTO> getMyReviews() {
+        UserDTO currentUser = backendClient.getCurrentUser();
+        return backendClient.getReviewsByUserId(currentUser.getId());
     }
 
     public AlbumReviewDTO createReview(ReviewCreateRequest request) {

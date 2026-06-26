@@ -47,8 +47,14 @@ public interface ApiBackendClient {
     @DeleteMapping("/alumno/{id}")
     AlumnoDto delete(@PathVariable("id") Long id);
     
+    @GetMapping("/reviews")
+    List<AlbumReviewDTO> getAllReviews();
+
     @GetMapping("/reviews/today")
     List<AlbumReviewDTO> getTopReviewsForToday();
+
+    @GetMapping("/reviews/user/{userId}")
+    List<AlbumReviewDTO> getReviewsByUserId(@PathVariable Long userId);
 
     @GetMapping("/reviews/album/{albumId}")
     AlbumReviewsResponseDTO getReviewsByAlbumId(@PathVariable("albumId") String albumId);

@@ -16,9 +16,21 @@ public class ReviewController {
     @Autowired
     private ReviewServiceImpl reviewServiceImpl;
 
+    @GetMapping
+    public ResponseEntity<List<AlbumReviewDTO>> getAllReviews() {
+        List<AlbumReviewDTO> reviews = reviewServiceImpl.getAllReviews();
+        return ResponseEntity.ok(reviews);
+    }
+
     @GetMapping("/today")
     public ResponseEntity<List<AlbumReviewDTO>> getTopReviewsForToday() {
         List<AlbumReviewDTO> reviews = reviewServiceImpl.getTopReviewsForToday();
+        return ResponseEntity.ok(reviews);
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<List<AlbumReviewDTO>> getMyReviews() {
+        List<AlbumReviewDTO> reviews = reviewServiceImpl.getMyReviews();
         return ResponseEntity.ok(reviews);
     }
 

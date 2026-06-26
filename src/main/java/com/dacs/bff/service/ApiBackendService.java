@@ -22,7 +22,11 @@ public interface ApiBackendService {
 
 	public AlumnoDto deleteAlumno(Long id) throws Exception;
 
+    public List<AlbumReviewDTO> getAllReviews();
+
     public List<AlbumReviewDTO> getTopReviewsForToday();
+
+    public List<AlbumReviewDTO> getReviewsByUserId(Long userId);
 
     public AlbumReviewsResponseDTO getReviewsByAlbumId(String albumId);
 

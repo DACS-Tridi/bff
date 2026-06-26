@@ -50,8 +50,18 @@ public class ApiBackendServiceImpl implements ApiBackendService {
 	}
 
 	@Override
+	public List<AlbumReviewDTO> getAllReviews() {
+		return apiBackendClient.getAllReviews();
+	}
+
+	@Override
 	public List<AlbumReviewDTO> getTopReviewsForToday() {
 		return apiBackendClient.getTopReviewsForToday();
+	}
+
+	@Override
+	public List<AlbumReviewDTO> getReviewsByUserId(Long userId) {
+		return apiBackendClient.getReviewsByUserId(userId);
 	}
 
 	@Override
