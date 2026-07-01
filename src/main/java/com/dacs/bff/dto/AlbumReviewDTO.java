@@ -28,7 +28,9 @@ public class AlbumReviewDTO {
     private List<String> tags;
     
     private String tone;
-    
+
+    private String reviewBody;
+
     private ZonedDateTime postedAt;
 
     @Data
