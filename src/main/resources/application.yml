@@ -20,12 +20,6 @@ server:
   port :  9001
   servlet:
     contextPath: /bff
-  ssl:
-    enabled: true
-    key-store: '${BFF_KEYSTORE:file:///C:/nginx-docker/nginx/ssl/keystore.p12}'
-    key-store-type: PKCS12
-    key-store-password: '${BFF_KEYSTORE_PASSWORD:changeit}'
-    key-alias: bff
 spring:
   security:
     oauth2:
